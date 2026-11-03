@@ -118,7 +118,7 @@
         "doctrine/event-manager": "2.1.1",
         "doctrine/lexer": "3.0.3",
         "doctrine/persistence": "4.2.1",
-        "drupal/captcha": "2.0.11",
+        "drupal/captcha": "2.0.12",
         "drupal/consumers": "1.24.0",
         "drupal/core": "11.4.11",
         "drupal/crop": "2.6.0",
