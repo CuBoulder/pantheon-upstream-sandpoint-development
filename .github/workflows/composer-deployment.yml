@@ -3,11 +3,10 @@ name: Deploy New Development Build
 on: 
   workflow_dispatch:
     inputs:
-      skip_composer:
-        description: 'Skip composer updates?'
-        required: false
+      run_composer:
+        description: 'Run composer updates?'
         type: boolean
-        default: false
+        default: true
 
 concurrency:
   group: ${{ github.workflow }}
@@ -29,7 +28,7 @@ jobs:
           php-version: '8.3'
 
       - name: Update composer files
-        if: ${{ inputs.skip_composer == 'false' }}
+        if: ${{ inputs.run_composer }}
         run: |
           echo "::group::Composer update #1"
           composer update
@@ -44,7 +43,7 @@ jobs:
           echo "::endgroup::"
 
       - name: Push changes back to repo
-        if: ${{ inputs.skip_composer == 'false' }}
+        if: ${{ inputs.run_composer }}
         id: commit
         run: |
           git add -A
