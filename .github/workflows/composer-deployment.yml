@@ -21,9 +21,17 @@ jobs:
 
       - name: Update composer files
         run: |
-          composer install
-          composer update-upstream-dependencies
+          echo "::group::Composer update #1"
           composer update
+          echo "::endgroup::"
+
+          echo "::group::Update upstream dependencies"
+          composer update-upstream-dependencies
+          echo "::endgroup::"
+
+          echo "::group::Composer update #2"
+          composer update
+          echo "::endgroup::"
 
       - name: Push changes back to repo
         id: commit
@@ -42,7 +50,7 @@ jobs:
           DATE=$(date +"%d-%m-%Y-%T")
 
           git commit -m "Workflow deployment — $DATE"
-          git push origin master
+          git push origin main
 
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
