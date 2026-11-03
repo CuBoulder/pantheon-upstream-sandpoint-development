@@ -1,0 +1,69 @@
+name: Deploy New Development Build
+
+on: workflow_dispatch
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Update and Deploy Developer Sandbox
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Include PHP and Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Update composer files
+        run: |
+          composer install
+          composer update-upstream-dependencies
+          composer update
+
+      - name: Push changes back to repo
+        id: commit
+        run: |
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes detected. Skipping deployment."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git config --global user.email "noreply@github.com"
+          git config --global user.name "GitHub Actions"
+
+          DATE=$(date +"%d-%m-%Y-%T")
+
+          git commit -m "Workflow deployment — $DATE"
+          git push origin master
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # Required to run drush commands
+      - name: Load Pantheon SSH key
+        # if: steps.commit.outputs.changed == 'true'
+        uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+      
+      - name: Install Terminus
+        # if: steps.commit.outputs.changed == 'true'
+        uses: pantheon-systems/terminus-github-actions@v1
+        with:
+          pantheon-machine-token: ${{ secrets.TERMINUS_TOKEN }}
+          terminus-version: 4.3.3
+
+      - name: Deploy updates to Pantheon
+        id: deploy
+        # if: steps.commit.outputs.changed == 'true'
+        run: |
+          echo "Deploying updates to " ${{ vars.SANDBOX_SITE_NAME }}
+          terminus env:wake ${{ vars.SANDBOX_SITE_NAME }}.live
+          terminus remote:drush ${{ vars.SANDBOX_SITE_NAME }}.live -- status
