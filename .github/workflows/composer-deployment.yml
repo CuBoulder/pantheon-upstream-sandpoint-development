@@ -72,6 +72,28 @@ jobs:
         id: deploy
         # if: steps.commit.outputs.changed == 'true'
         run: |
-          echo "Deploying updates to " ${{ vars.SANDBOX_SITE_NAME }}
+          echo "Deploying updates to ${{ vars.SANDBOX_SITE_NAME }}"
+          
           terminus env:wake ${{ vars.SANDBOX_SITE_NAME }}.live
-          terminus remote:drush ${{ vars.SANDBOX_SITE_NAME }}.live -- status
+          terminus site:upstream:clear-cache ${{ vars.SANDBOX_SITE_NAME }}
+
+          terminus upstream:updates:apply ${{ vars.SANDBOX_SITE_NAME }}.dev --accept-upstream
+
+          terminus env:deploy ${{ vars.SANDBOX_SITE_NAME }}.test --yes
+          terminus env:deploy ${{ vars.SANDBOX_SITE_NAME }} --yes --updatedb --cc
+
+          terminus remote:drush ${{ vars.SANDBOX_SITE_NAME }}.live -- cr
+
+          echo "::group::Features import"
+          terminus remote:drush ${{ vars.SANDBOX_SITE_NAME }}.live -- features:import cu_boulder_content_types --yes
+          echo "::endgroup::"
+
+          echo "::group::Config import from profile"
+          terminus remote:drush ${{ vars.SANDBOX_SITE_NAME }}.live -- config:import --partial --source=/code/web/profiles/custom/boulder_profile/config/install --yes
+          echo "::endgroup::"
+
+          echo "::group::Database update"
+          terminus remote:drush ${{ vars.SANDBOX_SITE_NAME }}.live -- updb --yes
+          echo "::endgroup::"
+
+          terminus remote:drush ${{ vars.SANDBOX_SITE_NAME }}.live -- cr
