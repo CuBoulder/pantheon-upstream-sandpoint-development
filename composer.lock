@@ -838,16 +838,16 @@
         },
         {
             "name": "cu-boulder/boulder_profile",
-            "version": "20261104",
+            "version": "20261104a",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CuBoulder/tiamat10-profile.git",
-                "reference": "98ba0a03310c9beb1d4ded575a5171a1c4f371f6"
+                "reference": "78f50b7566df1c014bf82ecf80f041f24c746c70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CuBoulder/tiamat10-profile/zipball/98ba0a03310c9beb1d4ded575a5171a1c4f371f6",
-                "reference": "98ba0a03310c9beb1d4ded575a5171a1c4f371f6",
+                "url": "https://api.github.com/repos/CuBoulder/tiamat10-profile/zipball/78f50b7566df1c014bf82ecf80f041f24c746c70",
+                "reference": "78f50b7566df1c014bf82ecf80f041f24c746c70",
                 "shasum": ""
             },
             "type": "drupal-custom-profile",
@@ -858,9 +858,9 @@
             "description": "Drupal 10 base install profile for CU Boulder",
             "support": {
                 "issues": "https://github.com/CuBoulder/tiamat10-profile/issues",
-                "source": "https://github.com/CuBoulder/tiamat10-profile/tree/20261104"
+                "source": "https://github.com/CuBoulder/tiamat10-profile/tree/20261104a"
             },
-            "time": "2026-11-04T19:14:45+00:00"
+            "time": "2026-11-04T20:41:43+00:00"
         },
         {
             "name": "cu-boulder/ckeditor5_bootstrap_accordion",
@@ -8615,7 +8615,7 @@
             "dist": {
                 "type": "path",
                 "url": "upstream-configuration/locked",
-                "reference": "3acbcbe5506594940c36af47ff2d7685774b7784"
+                "reference": "ed842a7463636ded8008aa5708ade632778f0389"
             },
             "require": {
                 "asm89/stack-cors": "v2.4.0",
@@ -8624,7 +8624,7 @@
                 "composer/installers": "v2.3.0",
                 "composer/semver": "3.4.4",
                 "cu-boulder/boulder_base": "20261022",
-                "cu-boulder/boulder_profile": "20261104",
+                "cu-boulder/boulder_profile": "20261104a",
                 "cu-boulder/ckeditor5_bootstrap_accordion": "dev-main",
                 "cu-boulder/ckeditor5_icons": "dev-main",
                 "cu-boulder/express_admin": "dev-main",
